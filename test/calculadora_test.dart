@@ -1,5 +1,5 @@
 import 'package:calculadora_corredor/calculadora.dart';
-import 'package:test/test.dart';
+import "package:test/test.dart";
 
 void main() {
   Calculadora calc = new Calculadora();
@@ -12,5 +12,10 @@ void main() {
     calc.withDistancia("5");
     calc.withPace("05:00");
     expect(calc.calculaTempo(), "25:00");
+  });
+  test('pace 5km', () {
+    calc.withDistancia("5");
+    calc.withTempo("29:10");
+    expect(calc.calculaPace(), "05:50");
   });
 }

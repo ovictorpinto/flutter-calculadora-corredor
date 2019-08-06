@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'calculadora.dart';
+import 'persistencia.dart';
 
 class InputWidget extends StatelessWidget {
   TextEditingController textFieldDistanciaController = TextEditingController();
@@ -75,23 +76,31 @@ class InputWidget extends StatelessWidget {
   }
 
   _calcularRitmo() {
-    print("Clicou pra achar o ritmo ${textFieldRitmoController.text}");
+    var calc = Calculadora()
+        .withDistancia(textFieldDistanciaController.text)
+        .withTempo(textFieldTempoController.text);
+    var novoPace = calc.calculaPace();
+    textFieldRitmoController.text = novoPace;
+    Persistencia().insert(calc);
   }
 
   _calcularDistancia() {
-    var novaDistancia = Calculadora()
+    var calc = Calculadora()
         .withPace(textFieldRitmoController.text)
-        .withTempo(textFieldTempoController.text)
-        .calculaDistancia();
+        .withTempo(textFieldTempoController.text);
+    var novaDistancia = calc.calculaDistancia();
     textFieldDistanciaController.text = novaDistancia.toString();
+    Persistencia().insert(calc);
   }
 
   _calcularTempo() {
-    var novoTempo = Calculadora()
+    var calc = Calculadora()
         .withPace(textFieldRitmoController.text)
-        .withDistancia(textFieldDistanciaController.text)
-        .calculaTempo();
+        .withDistancia(textFieldDistanciaController.text);
+
+    var novoTempo = calc.calculaTempo();
     textFieldTempoController.text = novoTempo;
+    Persistencia().insert(calc);
   }
 }
 

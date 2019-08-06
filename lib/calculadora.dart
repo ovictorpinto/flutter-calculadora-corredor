@@ -1,9 +1,10 @@
 import 'package:intl/intl.dart';
 
 class Calculadora {
+
   double _distancia;
   int _pace;
-  int _tempo;
+  int _tempo; //em segundos
 
   Calculadora withDistancia(String distancia) {
     _distancia = double.parse(distancia);
@@ -23,7 +24,7 @@ class Calculadora {
   /// h:mm:ss
   ///
   Calculadora withTempo(String tempo) {
-    List<String> splited = tempo.split("\.");
+    List<String> splited = tempo.split(":");
     assert(splited.length >= 2 && splited.length <= 3);
     int hor = 0;
     int min;
@@ -41,7 +42,8 @@ class Calculadora {
   }
 
   double calculaDistancia() {
-    return _tempo / _pace;
+    _distancia = _tempo / _pace;
+    return _distancia;
   }
 
   String calculaTempo() {
@@ -58,6 +60,17 @@ class Calculadora {
     retorno.write(NumberFormat("00").format(min));
     retorno.write(":");
     retorno.write(NumberFormat("00").format(sec));
+    return retorno.toString();
+  }
+
+  String calculaPace() {
+    var segundosKm = _tempo / _distancia;
+    var minutePace = (segundosKm / 60).floor();
+    var segundsPace = (segundosKm  % 60).floor();
+    StringBuffer retorno = new StringBuffer();
+    retorno.write(NumberFormat("00").format(minutePace));
+    retorno.write(":");
+    retorno.write(NumberFormat("00").format(segundsPace));
     return retorno.toString();
   }
 }
