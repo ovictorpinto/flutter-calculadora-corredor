@@ -41,9 +41,8 @@ class Calculadora {
     return this;
   }
 
-  double calculaDistancia() {
-    _distancia = _tempo / _pace;
-    return _distancia;
+  String calculaDistancia() {
+    return NumberFormat("##.00").format(_tempo / _pace);
   }
 
   String calculaTempo() {

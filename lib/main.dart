@@ -9,16 +9,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Calculadora do Corredor',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: new Scaffold(
-        appBar: AppBar(
-          title: Text("Calculadora do Corredor"),
+        theme: new ThemeData(
+          primarySwatch: Colors.blue,
         ),
-        body: new InputWidget(),
-      ),
-    );
+        home: new Scaffold(
+            appBar: AppBar(
+              title: Text("Calculadora do Corredor"),
+            ),
+            body: new Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                new InputWidget()
+              ],
+            )));
   }
 }

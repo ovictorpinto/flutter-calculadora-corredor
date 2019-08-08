@@ -1,13 +1,29 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'calculadora.dart';
 import 'persistencia.dart';
 
-class InputWidget extends StatelessWidget {
-  TextEditingController textFieldDistanciaController = TextEditingController();
-  TextEditingController textFieldTempoController = TextEditingController();
-  TextEditingController textFieldRitmoController = TextEditingController();
+class InputWidget extends StatefulWidget {
+  _ListWidgetState createState() => _ListWidgetState();
+}
+
+class _ListWidgetState extends State<InputWidget> {
+
+  _ListWidgetState() {
+    _refresh();
+  }
+
+  final TextEditingController textFieldDistanciaController =
+      TextEditingController();
+  final TextEditingController textFieldTempoController =
+      TextEditingController();
+  final TextEditingController textFieldRitmoController =
+      TextEditingController();
+
+  List<Map<String, dynamic>> itens = new List();
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +52,8 @@ class InputWidget extends StatelessWidget {
     return new Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           new Row(
             children: <Widget>[
@@ -58,7 +76,7 @@ class InputWidget extends StatelessWidget {
               ),
             ],
           ),
-          Container(
+          new Container(
             height: 16.0,
           ),
           new Row(
@@ -69,10 +87,32 @@ class InputWidget extends StatelessWidget {
                 child: Text("Calcular"),
               ),
             ],
+          ),
+          new Container(
+            height: 16.0,
+          ),
+          new Row(
+            children: <Widget>[
+              Expanded(
+                  child: ListView(shrinkWrap: true, children: _getListData())),
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: _limparResultados,
+              )
+            ],
           )
         ],
       ),
     );
+  }
+
+  _refresh() {
+    Future<List<Map<String, dynamic>>> maps = Persistencia().findAll();
+    maps.then((list) {
+      setState(() {
+        itens = list;
+      });
+    });
   }
 
   _calcularRitmo() {
@@ -81,7 +121,9 @@ class InputWidget extends StatelessWidget {
         .withTempo(textFieldTempoController.text);
     var novoPace = calc.calculaPace();
     textFieldRitmoController.text = novoPace;
+    calc.withPace(novoPace);
     Persistencia().insert(calc);
+    _refresh();
   }
 
   _calcularDistancia() {
@@ -90,7 +132,9 @@ class InputWidget extends StatelessWidget {
         .withTempo(textFieldTempoController.text);
     var novaDistancia = calc.calculaDistancia();
     textFieldDistanciaController.text = novaDistancia.toString();
+    calc.withDistancia(novaDistancia.toString());
     Persistencia().insert(calc);
+    _refresh();
   }
 
   _calcularTempo() {
@@ -100,7 +144,40 @@ class InputWidget extends StatelessWidget {
 
     var novoTempo = calc.calculaTempo();
     textFieldTempoController.text = novoTempo;
+    calc.withTempo(novoTempo);
     Persistencia().insert(calc);
+    _refresh();
+  }
+
+  _limparResultados() {
+    Persistencia().deleteAll();
+    _refresh();
+  }
+
+  _getListData() {
+    List<Widget> widgets = [];
+    widgets.add(Row(
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        Expanded(child: Text('DISTANCIA')),
+        Expanded(child: Text('PACE')),
+        Expanded(child: Text('TEMPO'))
+      ],
+    ));
+    for (int i = 0; i < min(itens.length, 5); i++) {
+      widgets.add(Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Expanded(child: Text('${itens[i][Persistencia.COL_DISTANCIA]}')),
+            Expanded(child: Text('${itens[i][Persistencia.COL_PACE]}')),
+            Expanded(child: Text('${itens[i][Persistencia.COL_TEMPO]}'))
+          ],
+        ),
+      ));
+    }
+    return widgets;
   }
 }
 

@@ -18,16 +18,16 @@ class Persistencia {
     };
   }
 
-  Future<void> insert(Calculadora calculadora) async {
+  Future<Database> open() async {
     final database = openDatabase(
       // Set the path to the database. Note: Using the `join` function from the
       // `path` package is best practice to ensure the path is correctly
       // constructed for each platform.
       join(await getDatabasesPath(), 'calculadora_database.db'),
-      // When the database is first created, create a table to store dogs.
+      // When the database is first created, create a table
       onCreate: (db, version) {
         return db.execute(
-          "CREATE $TABLE ($COL_DISTANCIA TEXT, $COL_PACE TEXT, $COL_TEMPO text)",
+          "CREATE table $TABLE ($COL_DISTANCIA TEXT, $COL_PACE TEXT, $COL_TEMPO text)",
         );
       },
       // Set the version. This executes the onCreate function and provides a
@@ -35,15 +35,29 @@ class Persistencia {
       version: 1,
     );
     // Get a reference to the database.
-    final Database db = await database;
+    return database;
+  }
 
+  Future<void> insert(Calculadora calculadora) async {
+    Database db = await open();
     // Insert the Dog into the correct table. Also specify the
     // `conflictAlgorithm`. In this case, if the same dog is inserted
     // multiple times, it replaces the previous data.
+
     await db.insert(
       '$TABLE',
       toMap(calculadora),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  Future<List<Map<String, dynamic>>> findAll() async {
+    Database db = await open();
+    return await db.query('$TABLE');
+  }
+
+  Future<void> deleteAll() async {
+    Database db = await open();
+    db.delete(TABLE);
   }
 }
