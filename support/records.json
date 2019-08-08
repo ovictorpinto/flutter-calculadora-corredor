@@ -1,0 +1,52 @@
+{
+  "records": [
+    {
+      "dist": "100 m",
+      "tempo": "9,58 s",
+      "athlete": "Usain Bolt",
+      "date": "2009-09-18"
+    },
+    {
+      "dist": "200 m",
+      "tempo": "19,19 s",
+      "athlete": "Usain Bolt",
+      "date": "2009-08-20"
+    },
+    {
+      "dist": "400 m",
+      "tempo": "43,03 s",
+      "athlete": "Wayde van Niekerk",
+      "date": "2016-08-14"
+    },
+    {
+      "dist": "800 m",
+      "tempo": "1:40,91 min",
+      "athlete": "David Rudisha",
+      "date": "2012-08-09"
+    },
+    {
+      "dist": "1 500 m",
+      "tempo": "3:26,00 min",
+      "athlete": "Hicham El Guerrouj",
+      "date": "1998-07-14"
+    },
+    {
+      "dist": "5 000 m",
+      "tempo": "12:37,35 min",
+      "athlete": "Kenenisa Bekele",
+      "date": "2004-05-31"
+    },
+    {
+      "dist": "10 000 m",
+      "tempo": "26:17,53 min",
+      "athlete": "Kenenisa Bekele",
+      "date": "2005-08-26"
+    },
+    {
+      "dist": "42 195 m",
+      "tempo": "2:01:39 h",
+      "athlete": "Eliud Kipchoge",
+      "date": "2018-09-16"
+    }
+  ]
+}
